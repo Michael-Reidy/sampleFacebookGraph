@@ -1,8 +1,0 @@
-me\plynk\sample\ApplicationConfiguration.class
-me\plynk\sample\Application.class
-me\plynk\user\UserController.class
-me\plynk\healthcheck\HealthCheckController.class
-me\plynk\user\UserService.class
-me\plynk\util\DatabaseInitialisation.class
-me\plynk\user\User.class
-me\plynk\user\UserRepository.class
