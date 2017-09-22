@@ -1,42 +1,45 @@
 package me.plynk.integration.healthcheck;
 
+import me.plynk.controller.HealthCheckController;
+import me.plynk.configuration.ApplicationConfiguration;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RestTemplate;
-
-import java.net.URI;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.springframework.http.HttpStatus.OK;
-import me.plynk.user.User;
-import me.plynk.sample.Application;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
+import org.springframework.web.context.WebApplicationContext;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(Application.class)
-@WebIntegrationTest({"server.port=0"})
+@ContextConfiguration(classes = { ApplicationConfiguration.class })
+@WebAppConfiguration
 public class HealthCheckIntegrationTest {
 
-  @Value("${local.server.port}")
-  private int port;
+  @Autowired
+  private WebApplicationContext wac;
 
-  @Test
-  public void healthCheckShouldReturnUp() throws Exception {
+  private MockMvc mockMvc;
 
-    RestTemplate restTemplate = new TestRestTemplate();
-    ResponseEntity<String> response = restTemplate.getForEntity(url("/health"), String.class);
-    assertThat(response.getStatusCode(), is(OK));
-    assertThat(response.getBody(), is("{\"status\":\"UP\"}"));
+  @Before
+  public void setup() throws Exception {
+    this.mockMvc = MockMvcBuilders.standaloneSetup(new HealthCheckController()).build();
   }
 
-  private URI url(String url) {
-
-    return URI.create("http://localhost:" + port + url);
+  @Test
+  public void makeSureHealthCheckOK() throws Exception {
+    this.mockMvc.perform(get("/health")).andDo(print()).andExpect(status().isOk())
+            .andReturn();
   }
 }

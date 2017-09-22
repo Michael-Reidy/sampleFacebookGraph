@@ -11,9 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import me.plynk.user.User;
-import me.plynk.user.UserController;
-import me.plynk.user.UserService;
+import me.plynk.controller.UserController;
 
 import java.util.List;
 import java.util.Optional;
