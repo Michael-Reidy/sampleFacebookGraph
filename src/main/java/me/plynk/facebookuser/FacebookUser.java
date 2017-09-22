@@ -12,30 +12,47 @@ public class FacebookUser implements Serializable {
     private String band;
     private User user;
 
-    public int countFriends() {
+    public int getCountFriends() {
         return countFriends;
     }
 
-    public FacebookUser countFriends(int countFriends) {
+    public void setCountFriends(int countFriends) {
         this.countFriends = countFriends;
-        return this;
     }
 
-    public String band() {
+    public String getBand() {
         return band;
     }
 
-    public FacebookUser band(String band) {
+    public void setBand(String band) {
         this.band = band;
-        return this;
     }
 
-    public User user() {
+    public User getUser() {
         return user;
     }
 
-    public FacebookUser user(User user) {
+    public void setUser(User user) {
         this.user = user;
-        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FacebookUser)) return false;
+
+        FacebookUser that = (FacebookUser) o;
+
+        if (countFriends != that.countFriends) return false;
+        if (band != null ? !band.equals(that.band) : that.band != null) return false;
+        return user != null ? user.equals(that.user) : that.user == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = countFriends;
+        result = 31 * result + (band != null ? band.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        return result;
     }
 }

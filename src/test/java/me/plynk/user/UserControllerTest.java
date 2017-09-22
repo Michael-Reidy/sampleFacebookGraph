@@ -50,8 +50,10 @@ public class UserControllerTest {
   @Test
   public void listShouldRespondWithOkAndResultsFromService() throws Exception {
 
-    User user1 = new User().facebookKey("123");
-    User user2 = new User().facebookKey("999");
+    User user1 = new User();
+    user1.setFacebookKey("123");
+    User user2 = new User();
+    user2.setFacebookKey("999");
     when(service.list()).thenReturn(asList(user1, user2));
     ResponseEntity<List<User>> result = controller.list();
     assertThat(result, is(responseEntityThat(containsInAnyOrder(user1, user2))));
@@ -69,26 +71,29 @@ public class UserControllerTest {
   @Test
   public void readShouldReplyWithCustomerIfCustomerExists() throws Exception {
 
-    User customer = new User().facebookKey("123");
-    when(service.read("123")).thenReturn(Optional.of(customer));
+    User user1 = new User();
+    user1.setFacebookKey("123");
+    when(service.read("123")).thenReturn(Optional.of(user1));
     ResponseEntity<User> result = controller.read("123");
     assertThat(result, is(responseEntityWithStatus(OK)));
-    assertThat(result, is(responseEntityThat(equalTo(customer))));
+    assertThat(result, is(responseEntityThat(equalTo(user1))));
   }
 
   @Test
   public void createShouldReplyWithConflictIfCustomerAlreadyExists() throws Exception {
 
-    User customer = new User().facebookKey("123");
-    when(service.create(customer)).thenReturn(Optional.empty());
-    ResponseEntity<User> result = controller.create(customer);
+    User user1 = new User();
+    user1.setFacebookKey("123");
+    when(service.create(user1)).thenReturn(Optional.empty());
+    ResponseEntity<User> result = controller.create(user1);
     assertThat(result, is(responseEntityWithStatus(CONFLICT)));
   }
 
   @Test
   public void createShouldReplyWithCreatedAndCustomerData() throws Exception {
 
-    User user = new User().facebookKey("123");
+    User user = new User();
+    user.setFacebookKey("123");
     when(service.create(user)).thenReturn(Optional.of(user));
     ResponseEntity<User> result = controller.create(user);
     assertThat(result, is(responseEntityWithStatus(CREATED)));
@@ -98,8 +103,9 @@ public class UserControllerTest {
   @Test
   public void putShouldReplyWithNotFoundIfCustomerDoesNotExist() throws Exception {
 
-    User newCustomerData = new User().facebookKey("123");
-    when(service.replace(newCustomerData)).thenReturn(Optional.empty());
+    User user = new User();
+    user.setFacebookKey("123");
+    when(service.replace(user)).thenReturn(Optional.empty());
     ResponseEntity<User> result = controller.put("123", new User());
     assertThat(result, is(responseEntityWithStatus(NOT_FOUND)));
   }
@@ -107,18 +113,20 @@ public class UserControllerTest {
   @Test
   public void putShouldReplyWithUpdatedCustomerAndOkIfCustomerExists() throws Exception {
 
-    User newCustomerData = new User().facebookKey("123");
-    when(service.replace(newCustomerData)).thenReturn(Optional.of(newCustomerData));
+    User user = new User();
+    user.setFacebookKey("123");
+    when(service.replace(user)).thenReturn(Optional.of(user));
     ResponseEntity<User> result = controller.put("123", new User());
     assertThat(result, is(responseEntityWithStatus(OK)));
-    assertThat(result, is(responseEntityThat(equalTo(newCustomerData))));
+    assertThat(result, is(responseEntityThat(equalTo(user))));
   }
 
   @Test
   public void patchShouldReplyWithNotFoundIfCustomerDoesNotExist() throws Exception {
 
-    User newCustomerData = new User().facebookKey("123");
-    when(service.update(newCustomerData)).thenReturn(Optional.empty());
+    User user = new User();
+    user.setFacebookKey("123");
+    when(service.update(user)).thenReturn(Optional.empty());
     ResponseEntity<User> result = controller.patch("123", new User());
     assertThat(result, is(responseEntityWithStatus(NOT_FOUND)));
   }
@@ -126,11 +134,12 @@ public class UserControllerTest {
   @Test
   public void patchShouldReplyWithUpdatedCustomerAndOkIfCustomerExists() throws Exception {
 
-    User newCustomerData = new User().facebookKey("123");
-    when(service.update(newCustomerData)).thenReturn(Optional.of(newCustomerData));
+    User user = new User();
+    user.setFacebookKey("123");
+    when(service.update(user)).thenReturn(Optional.of(user));
     ResponseEntity<User> result = controller.patch("123", new User());
     assertThat(result, is(responseEntityWithStatus(OK)));
-    assertThat(result, is(responseEntityThat(equalTo(newCustomerData))));
+    assertThat(result, is(responseEntityThat(equalTo(user))));
   }
 
   @Test

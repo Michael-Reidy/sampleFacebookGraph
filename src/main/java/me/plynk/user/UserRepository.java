@@ -42,7 +42,8 @@ public class UserRepository {
   }
 
   public void delete(String facebookKey) {
-
-    dbMapper.delete(new User().facebookKey(facebookKey), new DynamoDBMapperConfig(SaveBehavior.CLOBBER));
+    User user = new User();
+    user.setFacebookKey(facebookKey);
+    dbMapper.delete(user, new DynamoDBMapperConfig(SaveBehavior.CLOBBER));
   }
 }

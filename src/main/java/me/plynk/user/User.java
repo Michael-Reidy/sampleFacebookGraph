@@ -20,22 +20,16 @@ public class User implements Serializable {
 		return facebookKey;
 	}
 
-	public String facebookKey() {
-		return facebookKey;
-	}
-
-	public User facebookKey(String facebookKey) {
+	public void setFacebookKey(String facebookKey) {
 		this.facebookKey = facebookKey;
-		return this;
 	}
 
-	public String fullName() {
+	public String getFullName() {
 		return fullName;
 	}
 
-	public User fullName(String fullName) {
+	public void setFullName(String fullName) {
 		this.fullName = fullName;
-		return this;
 	}
 
 	@Override

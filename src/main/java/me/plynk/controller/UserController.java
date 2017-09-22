@@ -24,6 +24,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
+@RequestMapping("/v1")
 public class UserController {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
@@ -55,7 +56,10 @@ public class UserController {
   public ResponseEntity<User> sample() {
 
     log.trace("return a test User");
-    return new ResponseEntity(new User().fullName("Test User").facebookKey("9999"), OK);
+    User user = new User();
+    user.setFullName("Test");
+    user.setFacebookKey("9999");
+    return new ResponseEntity(user, OK);
   }
 
   @RequestMapping(path = "/user", method = RequestMethod.POST)
@@ -72,7 +76,8 @@ public class UserController {
           , @RequestBody User user) {
 
     log.trace("Entering put() with {}, {}", facebookKey, user);
-    return service.replace(user.facebookKey(facebookKey))
+    user.setFacebookKey(facebookKey);
+    return service.replace(user)
         .map(newUserData -> new ResponseEntity<>(newUserData, OK))
         .orElse(new ResponseEntity<>(NOT_FOUND));
   }
@@ -81,7 +86,8 @@ public class UserController {
   public ResponseEntity<User> patch(@PathVariable String facebookKey, @RequestBody User user) {
 
     log.trace("Entering patch() with {}, {}", facebookKey, user);
-    return service.update(user.facebookKey(facebookKey))
+    user.setFacebookKey(facebookKey);
+    return service.update(user)
         .map(newCustomerData -> new ResponseEntity<>(newCustomerData, OK))
         .orElse(new ResponseEntity<>(NOT_FOUND));
   }

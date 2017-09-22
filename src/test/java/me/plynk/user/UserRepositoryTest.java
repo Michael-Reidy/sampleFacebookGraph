@@ -55,24 +55,28 @@ public class UserRepositoryTest {
   @Test
   public void readShouldWrapResultIntoOptional() throws Exception {
 
-    User customer = new User().facebookKey("123");
-    when(dbMapper.load(User.class, "123")).thenReturn(customer);
+    User user = new User();
+    user.setFacebookKey("123");
+    when(dbMapper.load(User.class, "123")).thenReturn(user);
     User result = repository.read("123").get();
-    assertThat(result, is(equalTo(customer)));
+    assertThat(result, is(equalTo(user)));
   }
 
   @Test
   public void saveShouldPersistCustomer() throws Exception {
 
-    User customer = new User().facebookKey("123");
-    repository.save(customer);
-    verify(dbMapper).save(customer);
+    User user = new User();
+    user.setFacebookKey("123");
+    repository.save(user);
+    verify(dbMapper).save(user);
   }
 
   @Test
   public void deleteShouldDeleteCustomerByName() throws Exception {
 
     repository.delete("123");
-    verify(dbMapper).delete(eq(new User().facebookKey("123")), any(DynamoDBMapperConfig.class));
+    User user = new User();
+    user.setFacebookKey("123");
+    verify(dbMapper).delete(eq(user), any(DynamoDBMapperConfig.class));
   }
 }

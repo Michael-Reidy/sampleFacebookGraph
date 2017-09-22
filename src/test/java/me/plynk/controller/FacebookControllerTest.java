@@ -51,10 +51,18 @@ public class FacebookControllerTest {
   @Test
   public void listShouldRespondWithOkAndResultsFromService() throws Exception {
 
-    User user1 = new User().facebookKey("123");
-    User user2 = new User().facebookKey("999");
-    FacebookUser fbuser1 = new FacebookUser().countFriends(9).band("Sisters of Mercy").user(user1);
-    FacebookUser fbuser2 = new FacebookUser().countFriends(19).band("The Stone Roses").user(user2);
+    User user1 = new User();
+    user1.setFacebookKey("123");
+    User user2 = new User();
+    user2.setFacebookKey("999");
+    FacebookUser fbuser1 = new FacebookUser();
+    fbuser1.setCountFriends(9);
+    fbuser1.setBand("Sisters of Mercy");
+    fbuser1.setUser(user1);
+    FacebookUser fbuser2 = new FacebookUser();
+    fbuser2.setCountFriends(99);
+    fbuser2.setBand("The Stone Roses");
+    fbuser2.setUser(user1);
     when(userService.list()).thenReturn(asList(user1, user2));
     when(facebookUserService.enhance(user1)).thenReturn(fbuser1);
     when(facebookUserService.enhance(user2)).thenReturn(fbuser2);
@@ -74,8 +82,12 @@ public class FacebookControllerTest {
   @Test
   public void readShouldReplyWithCustomerIfCustomerExists() throws Exception {
 
-    User user = new User().facebookKey("123");
-    FacebookUser fbuser = new FacebookUser().countFriends(9).band("Sisters of Mercy").user(user);
+    User user = new User();
+    user.setFacebookKey("123");
+    FacebookUser fbuser = new FacebookUser();
+    fbuser.setCountFriends(9);
+    fbuser.setBand("Sisters of Mercy");
+    fbuser.setUser(user);
     when(userService.read("123")).thenReturn(Optional.of(user));
     when(facebookUserService.enhance(user)).thenReturn(fbuser);
     ResponseEntity<FacebookUser> result = controller.read("123");

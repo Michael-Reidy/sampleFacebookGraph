@@ -27,8 +27,8 @@ public class UserService {
   public Optional<User> create(User user) {
 
     log.trace("Entering create() with {}", user);
-    if (repository.read(user.facebookKey()).isPresent()) {
-      log.warn("User {} not found", user.facebookKey());
+    if (repository.read(user.getFacebookKey()).isPresent()) {
+      log.warn("User {} not found", user.getFacebookKey());
       return Optional.empty();
     }
     repository.save(user);
@@ -38,14 +38,14 @@ public class UserService {
   public Optional<User> replace(User newUserData) {
 
     log.trace("Entering replace() with {}", newUserData);
-    Optional<User> existingUser = repository.read(newUserData.facebookKey());
+    Optional<User> existingUser = repository.read(newUserData.getFacebookKey());
     if (!existingUser.isPresent()) {
-      log.warn("User {} not found", newUserData.facebookKey());
+      log.warn("User {} not found", newUserData.getFacebookKey());
       return Optional.empty();
     }
     User user = existingUser.get();
-    user.facebookKey(newUserData.facebookKey());
-    user.fullName(newUserData.fullName());
+    user.setFacebookKey(newUserData.getFacebookKey());
+    user.setFullName(newUserData.getFullName());
 
     repository.save(user);
     return Optional.of(user);
@@ -54,17 +54,17 @@ public class UserService {
   public Optional<User> update(User newUserData) {
 
     log.trace("Entering update() with {}", newUserData);
-    Optional<User> existingUser = repository.read(newUserData.facebookKey());
+    Optional<User> existingUser = repository.read(newUserData.getFacebookKey());
     if (!existingUser.isPresent()) {
-      log.warn("User {} not found", newUserData.facebookKey());
+      log.warn("User {} not found", newUserData.getFacebookKey());
       return Optional.empty();
     }
     User user = existingUser.get();
-    if (!isNullOrEmpty(newUserData.facebookKey())) {
-      user.facebookKey(newUserData.facebookKey());
+    if (!isNullOrEmpty(newUserData.getFacebookKey())) {
+      user.setFacebookKey(newUserData.getFacebookKey());
     }
-    if (!isNullOrEmpty(newUserData.fullName())) {
-      user.fullName(newUserData.fullName());
+    if (!isNullOrEmpty(newUserData.getFullName())) {
+      user.setFullName(newUserData.getFullName());
     }
     repository.save(user);
     return Optional.of(user);

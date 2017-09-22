@@ -32,7 +32,15 @@ public class FacebookUserController {
   public ResponseEntity<FacebookUser> sample() {
 
     log.trace("return a test User");
-    return new ResponseEntity(new FacebookUser().band("We are Band").countFriends(99).user(new User().fullName("Test User").facebookKey("9999")), OK);
+    User user = new User();
+    user.setFullName("Test");
+    user.setFacebookKey("9999");
+
+    FacebookUser facebookUser = new FacebookUser();
+    facebookUser.setCountFriends(9999);
+    facebookUser.setBand("Band");
+    facebookUser.setUser(user);
+    return new ResponseEntity(facebookUser, OK);
   }
 
   @RequestMapping(path = "/facebookuser", method = RequestMethod.GET)

@@ -15,7 +15,7 @@ public class FacebookUserService {
     private static final String MUSIC_DATA_FIRST_QUERY =  "$.music.data[0].name";
 
     public FacebookUser enhance(User user) {
-        String url = String.format(FACEBOOK_USER_URL_TEMPLATE,user.facebookKey());
+        String url = String.format(FACEBOOK_USER_URL_TEMPLATE,user.getFacebookKey());
 
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
@@ -24,7 +24,11 @@ public class FacebookUserService {
         Integer friendCount = jsonContext.read(TOTAL_FRIEND_COUNT_QUERY);
         String band = jsonContext.read(MUSIC_DATA_FIRST_QUERY);
 
-        return new FacebookUser().user(user).countFriends(friendCount).band(band);
+        FacebookUser facebookUser = new FacebookUser();
+        facebookUser.setUser(user);
+        facebookUser.setCountFriends(friendCount);
+        facebookUser.setBand(band);
+        return facebookUser;
     }
 
 }
